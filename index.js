@@ -38,9 +38,6 @@ const letters = [
 ]
 
 const random = Math.floor(Math.random() * 36)
-console.log(random)
 
-const test = (Object.values(letters[random])) + ""
-
-
-console.log(test)
+const letter = (Object.values(letters[random])) + ""
+console.log(letter)
