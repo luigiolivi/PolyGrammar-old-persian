@@ -1,10 +1,3 @@
-const letterP = document.getElementById("letterP")
-const scoreP = document.getElementById("scoreP")
-const buttonsOption = document.getElementsByClassName("buttonOption")
-
-import score from "./score"
-import updateScore from "./score"
-
 const letters = [
     { a: "𐎠" },
     { i: "𐎡" },
@@ -44,7 +37,16 @@ const letters = [
     { h: "𐏃" }
 ]
 
+const letterP = document.getElementById("letterP")
+const scoreP = document.getElementById("scoreP")
+const buttonsOption = document.getElementsByClassName("buttonOption")
+
+let score = 0
+
 const startChallenge = () => {
+
+    console.log(score)
+
     const generateRandomIndex = () => {
         const random = Math.floor(Math.random() * 36)
 
@@ -63,6 +65,26 @@ const startChallenge = () => {
         return transliteration.toString().trim()
     }
 
+    const updateScore = (score) => {
+        scoreP.innerText = `Score: ${score}`
+    }
+
+    const checkAnswer = (option) => {
+        if (option == randomCorrectButton) {
+            score++
+            updateScore(score)
+
+            randomCorrectButton = null
+        }
+
+        else {
+            score = 0
+            updateScore(0)
+
+            randomCorrectButton = null
+        }
+    }
+
     const challengeIndex = generateRandomIndex()
     const challengeLetter = getLetterByIndex(challengeIndex)
     const challengeKey = getKeyByIndex(challengeIndex)
@@ -77,7 +99,7 @@ const startChallenge = () => {
         while (options[i] == null) {
             let randomKey = getKeyByIndex(generateRandomIndex())
 
-            if(randomKey === challengeKey || options.includes(randomKey)) continue
+            if (randomKey === challengeKey || options.includes(randomKey)) continue
             else options.push(randomKey)
         }
     }
@@ -88,27 +110,13 @@ const startChallenge = () => {
         }
     }
 
-    scoreP.innerText = `Score: ${score}`
-
-    const checkAnswer = (option) => {
-        if (option == randomCorrectButton) {
-            updateScore()
-
-            randomCorrectButton = null
-            
-            startChallenge()
-        }
-
-        else {
-
-        }
+    for (let i = 0; i < 4; i++ ) {
+        buttonsOption[i].addEventListener('click', function () { checkAnswer(i) })
     }
-    
-    buttonsOption[0].addEventListener('click', function() {checkAnswer(0)})
-    buttonsOption[1].addEventListener('click', function() {checkAnswer(1)})
-    buttonsOption[2].addEventListener('click', function() {checkAnswer(2)})
-    buttonsOption[3].addEventListener('click', function() {checkAnswer(3)})
 }
 
+window.addEventListener('load', startChallenge) 
 
-window.addEventListener('load', startChallenge)
+for (let i = 0; i < 4; i++ ) {
+    buttonsOption[i].addEventListener('click', startChallenge)
+}
