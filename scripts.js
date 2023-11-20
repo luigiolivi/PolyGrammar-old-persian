@@ -2,6 +2,9 @@ const letterP = document.getElementById("letterP")
 const scoreP = document.getElementById("scoreP")
 const buttonsOption = document.getElementsByClassName("buttonOption")
 
+import score from "./score"
+import updateScore from "./score"
+
 const letters = [
     { a: "𐎠" },
     { i: "𐎡" },
@@ -68,12 +71,8 @@ const startChallenge = () => {
 
     let randomCorrectButton = Math.floor(Math.random() * 4)
     buttonsOption[randomCorrectButton].innerText = challengeKey
-    console.log(randomCorrectButton)
-
-    const incorrectButtons = [0, 1, 2, 3].filter((correct) => correct !== randomCorrectButton)
 
     let options = []
-
     for (let i = 0; i < 3; i++) {
         while (options[i] == null) {
             let randomKey = getKeyByIndex(generateRandomIndex())
@@ -89,25 +88,26 @@ const startChallenge = () => {
         }
     }
 
-    let score = 0
+    scoreP.innerText = `Score: ${score}`
 
-    const updateScore = () => {
-        score + 1
-        scoreP.innerText = `Score: ${score}`
+    const checkAnswer = (option) => {
+        if (option == randomCorrectButton) {
+            updateScore()
+
+            randomCorrectButton = null
+            
+            startChallenge()
+        }
+
+        else {
+
+        }
     }
-
-    const correctAnswer = () => {
-        updateScore()
-        startChallenge()
-    }
-
-    const incorrectAnswer = () => {
-        score = 0
-        startChallenge()
-    }
-
-    buttonsOption[randomCorrectButton].addEventListener('click', correctAnswer)
     
+    buttonsOption[0].addEventListener('click', function() {checkAnswer(0)})
+    buttonsOption[1].addEventListener('click', function() {checkAnswer(1)})
+    buttonsOption[2].addEventListener('click', function() {checkAnswer(2)})
+    buttonsOption[3].addEventListener('click', function() {checkAnswer(3)})
 }
 
 
